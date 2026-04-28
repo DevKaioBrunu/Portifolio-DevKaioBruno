@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio — Dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300..700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font: inherit; }
+
+    /* ─── DESIGN TOKENS ────────────────────────────────────── */
+    :root {
+      --color-bg:             #0a0c10;
+      --color-surface:        #0d1117;
+      --color-surface-2:      #111827;
+      --color-surface-offset: #1a2236;
+      --color-border:         rgba(30, 58, 120, 0.35);
+
+      --color-text:           #e2e8f0;
+      --color-text-muted:     #94a3b8;
+      --color-text-faint:     #475569;
+
+      --color-primary:        #1d4ed8;
+      --color-primary-hover:  #2563eb;
+      --color-primary-glow:   rgba(29, 78, 216, 0.25);
+
+      --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
+      --shadow-md:   0 4px 16px rgba(0,0,0,0.5);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,0.6);
+      --shadow-glow: 0 0 30px rgba(29, 78, 216, 0.2);
+
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-body:    'Inter', 'Segoe UI', sans-serif;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLL-REVEAL BASE ───────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── SCROLLBAR ────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+
+    /* ─── SECTION HELPERS ──────────────────────────────────── */
+    section { padding: 96px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #e2e8f0 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      color: var(--color-text-muted);
+      font-size: 1rem;
+      margin-bottom: 48px;
+    }
+
+    /* ─── BUTTONS ──────────────────────────────────────────── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-primary);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      transition: background 180ms ease, box-shadow 180ms ease;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      box-shadow: 0 0 20px var(--color-primary-glow);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      background: transparent;
+      transition: background 180ms, box-shadow 180ms;
+    }
+    .btn-outline:hover {
+      background: rgba(29,78,216,0.12);
+      box-shadow: 0 0 12px var(--color-primary-glow);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      background: transparent;
+      transition: border-color 180ms, color 180ms;
+    }
+    .btn-ghost:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+    }
+
+    /* ─── NAVBAR ───────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(10, 12, 16, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--color-text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo svg { flex-shrink: 0; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color 150ms, background 150ms;
+    }
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* Mobile nav */
+    @media (max-width: 640px) {
+      #navbar { padding: 0 20px; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--color-surface);
+        flex-direction: column;
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border);
+        gap: 4px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { width: 100%; padding: 12px 16px; }
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    #sobre {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradient blobs */
+    #sobre::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(29,78,216,0.15) 0%, transparent 70%);
+      top: -150px; left: -150px;
+      pointer-events: none;
+    }
+    #sobre::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(29,78,216,0.1) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+      pointer-events: none;
+    }
+
+    .hero-edit-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      z-index: 1;
+    }
+
+    #editToggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-surface-offset);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transition: border-color 180ms, color 180ms, background 180ms;
+    }
+    #editToggle:hover { border-color: var(--color-primary); color: var(--color-text); }
+    #editToggle.active {
+      border-color: var(--color-primary);
+      background: rgba(29,78,216,0.12);
+      color: var(--color-primary);
+    }
+
+    /* Bio Card */
+    .bio-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 40px;
+      box-shadow: var(--shadow-glow);
+      max-width: 800px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 700px) {
+      .bio-card {
+        grid-template-columns: 1fr;
+        padding: 28px 20px;
+        gap: 24px;
+      }
+    }
+
+    /* Avatar */
+    .bio-avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-placeholder {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 2px dashed var(--color-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--color-text-faint);
+      font-size: 12px;
+      transition: border-color 200ms, background 200ms;
+      overflow: hidden;
+      position: relative;
+    }
+    .avatar-placeholder:hover {
+      border-color: var(--color-primary);
+      background: rgba(29,78,216,0.06);
+      color: var(--color-primary);
+    }
+    .avatar-placeholder img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: opacity 0.3s;
+    }
+    .avatar-placeholder.has-image svg,
+    .avatar-placeholder.has-image span { display: none; }
+
+    /* Bio content */
+    .bio-content { display: flex; flex-direction: column; gap: 16px; }
+
+    .bio-name {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+
+    .bio-role {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+
+    .bio-description {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* contenteditable focus style */
+    [contenteditable="true"]:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: 4px;
+      background: rgba(29,78,216,0.06);
+    }
+
+    .bio-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      background: var(--color-surface-2);
+      cursor: pointer;
+      transition: border-color 150ms, color 150ms, box-shadow 150ms;
+      position: relative;
+    }
+    .social-link:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+      box-shadow: 0 0 12px var(--color-primary-glow);
+    }
+
+    /* ─── POPOVER ──────────────────────────────────────────── */
+    .popover {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-surface-offset);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      min-width: 280px;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .popover.open { display: flex; }
+    .popover label {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .popover input[type="text"],
+    .popover input[type="url"] {
+      width: 100%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--color-text);
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 150ms;
+    }
+    .popover input:focus { border-color: var(--color-primary); }
+    .popover-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .popover-save {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 150ms;
+    }
+    .popover-save:hover { background: var(--color-primary-hover); }
+    .popover-cancel {
+      background: transparent;
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 150ms;
+    }
+    .popover-cancel:hover { color: var(--color-text); }
+
+    /* ─── SKILLS ───────────────────────────────────────────── */
+    #skills { background: var(--color-surface); }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .skill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+      transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+    }
+    .skill-badge:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 14px var(--color-primary-glow);
+      transform: translateY(-2px);
+    }
+    .skill-badge .skill-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    /* ─── PROJECTS ─────────────────────────────────────────── */
+    #projetos { background: var(--color-bg); }
+
+    .projects-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 16px 0 28px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-primary) transparent;
+    }
+    .projects-track::-webkit-scrollbar { height: 4px; }
+    .projects-track::-webkit-scrollbar-track { background: transparent; }
+    .projects-track::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 2px; }
+
+    .project-card {
+      min-width: 360px;
+      max-width: 360px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      overflow: hidden;
+      scroll-snap-align: start;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .project-image-area {
+      position: relative;
+      height: 200px;
+      background: var(--color-surface-2);
+      overflow: hidden;
+    }
+    .project-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 300ms;
+    }
+    .project-card:hover .project-img { transform: scale(1.04); }
+
+    .project-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--color-text-faint);
+      font-size: 13px;
+    }
+    .project-img-placeholder svg { opacity: 0.5; }
+
+    .change-img-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(10,12,16,0.8);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+      transition: background 150ms, color 150ms;
+    }
+    .change-img-btn:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+    .project-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    .project-description {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag {
+      background: rgba(29,78,216,0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(29,78,216,0.3);
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: text;
+    }
+    .tag:focus { outline: 2px solid var(--color-primary); border-radius: 999px; }
+
+    .add-tag-btn {
+      background: transparent;
+      border: 1px dashed var(--color-border);
+      color: var(--color-text-faint);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      transition: border-color 150ms, color 150ms;
+    }
+    .add-tag-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+    .project-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* Popover on project links */
+    .project-links .popover {
+      bottom: auto;
+      top: calc(100% + 10px);
+    }
+
+    .remove-card-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(10,12,16,0.85);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      font-size: 14px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms, color 150ms;
+    }
+    .remove-card-btn:hover { background: #7f1d1d; color: #fca5a5; border-color: #7f1d1d; }
+
+    /* Add project card */
+    .add-project-card {
+      min-width: 200px;
+      max-width: 200px;
+      height: auto;
+      min-height: 320px;
+      background: var(--color-surface);
+      border: 2px dashed var(--color-border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      transition: border-color 200ms, color 200ms, background 200ms;
+    }
+    .add-project-card:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(29,78,216,0.06);
+    }
+    .add-project-card svg { opacity: 0.6; }
+
+    /* Carousel controls */
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .carousel-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 150ms, color 150ms, box-shadow 150ms;
+    }
+    .carousel-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+      box-shadow: 0 0 12px var(--color-primary-glow);
+    }
+
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: var(--color-text-faint);
+      transition: width 250ms ease, background 250ms ease;
+      border: none;
+    }
+    .carousel-dot.active {
+      width: 20px;
+      background: var(--color-primary);
+    }
+
+    /* ─── CONTACT ──────────────────────────────────────────── */
+    #contato { background: var(--color-surface); }
+
+    .contact-card {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: var(--shadow-glow);
+    }
+
+    @media (max-width: 600px) {
+      .contact-card { padding: 32px 20px; }
+    }
+
+    .contact-cta {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    .contact-subtitle {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      max-width: 480px;
+    }
+
+    .contact-email-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      width: 100%;
+      max-width: 360px;
+    }
+    .contact-email-wrap svg { color: var(--color-primary); flex-shrink: 0; }
+    .contact-email {
+      color: var(--color-text);
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      outline: none;
+      flex: 1;
+      min-width: 0;
+    }
+    .contact-email[contenteditable="true"]:focus {
+      outline: none;
+      border-bottom: 1px solid var(--color-primary);
+    }
+
+    .contact-social {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    footer {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--color-text-faint);
+      font-size: 13px;
+    }
+    footer .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* ─── PARTICLES ────────────────────────────────────────── */
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+<nav id="navbar" role="navigation" aria-label="Navegação principal">
+  <a href="#sobre" class="nav-logo" aria-label="Ir para início">
+    <!-- Minimal letter-mark logo -->
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="#1d4ed8"/>
+      <text x="16" y="22" text-anchor="middle" font-family="'Space Grotesk',sans-serif"
+            font-weight="700" font-size="14" fill="white">KB</text>
+    </svg>
+    DevKaio
+  </a>
+
+  <button class="nav-hamburger" id="menuBtn" aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section id="sobre" aria-label="Sobre mim">
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <div class="hero-edit-bar reveal">
+    <button id="editToggle" aria-pressed="false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      ✏️ Editar perfil
+    </button>
+  </div>
+
+  <div class="bio-card reveal" id="bioCard" style="transition-delay:0.1s">
+    <!-- Avatar -->
+    <div class="bio-avatar">
+      <div class="avatar-placeholder" id="avatarArea" role="button"
+           tabindex="0" aria-label="Clique para adicionar foto">
+        <!-- Camera icon -->
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1
+                   2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span>Adicionar foto</span>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*" hidden aria-hidden="true" />
+    </div>
+
+    <!-- Bio content -->
+    <div class="bio-content">
+      <h1 class="bio-name" id="bioName" contenteditable="false"
+          aria-label="Nome (clique para editar)">Seu Nome Aqui</h1>
+      <p class="bio-role" id="bioRole" contenteditable="false"
+         aria-label="Cargo (clique para editar)">Desenvolvedor Full-Stack · Designer · Criador</p>
+      <p class="bio-description" id="bioDesc" contenteditable="false"
+         aria-label="Descrição (clique para editar)">
+        Escreva uma breve descrição sobre você, sua experiência, paixões e objetivos profissionais.
+        Clique em "Editar perfil" para personalizar este texto.
+      </p>
+
+      <div class="bio-links">
+        <!-- GitHub -->
+        <a href="#" class="social-link" id="linkGithub" rel="noopener noreferrer"
+           contenteditable="false" aria-label="GitHub">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839
+                     9.504.5.092.682-.217.682-.483
+                     0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608
+                     1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088
+                     2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951
+                     0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65
+                     0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12
+                     6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296
+                     2.747-1.027 2.747-1.027.546 1.379.202 2.398.1
+                     2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339
+                     4.695-4.566 4.943.359.309.678.92.678 1.855
+                     0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019
+                     10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          GitHub
+          <div class="popover" role="dialog" aria-modal="true" aria-label="Editar link GitHub">
+            <label>URL do GitHub</label>
+            <input type="url" placeholder="https://github.com/seu-usuario" />
+            <div class="popover-actions">
+              <button class="popover-cancel">Cancelar</button>
+              <button class="popover-save">Salvar</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="#" class="social-link" id="linkLinkedin" rel="noopener noreferrer"
+           contenteditable="false" aria-label="LinkedIn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853
+                     0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9
+                     1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267
+                     5.455v6.286zM5.337 7.433a2.062 2.062 0 0
+                     1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782
+                     13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0
+                     1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24
+                     23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          LinkedIn
+          <div class="popover" role="dialog" aria-modal="true" aria-label="Editar link LinkedIn">
+            <label>URL do LinkedIn</label>
+            <input type="url" placeholder="https://linkedin.com/in/seu-perfil" />
+            <div class="popover-actions">
+              <button class="popover-cancel">Cancelar</button>
+              <button class="popover-save">Salvar</button>
+            </div>
+          </div>
+        </a>
+
+        <!-- Email -->
+        <a href="#" class="social-link" id="linkEmail" contenteditable="false"
+           aria-label="Email">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2
+                     2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Email
+          <div class="popover" role="dialog" aria-modal="true" aria-label="Editar email">
+            <label>Endereço de email</label>
+            <input type="email" placeholder="seu@email.com" />
+            <div class="popover-actions">
+              <button class="popover-cancel">Cancelar</button>
+              <button class="popover-save">Salvar</button>
+            </div>
+          </div>
+        </a>
+      </div><!-- /.bio-links -->
+    </div><!-- /.bio-content -->
+  </div><!-- /.bio-card -->
+</section>
+
+<!-- ═══════════════════════════ SKILLS ═══════════════════════════ -->
+<section id="skills" aria-label="Habilidades">
+  <div class="section-inner">
+    <h2 class="section-title reveal">Skills &amp; Tecnologias</h2>
+    <p class="section-subtitle reveal" style="transition-delay:0.05s">
+      Ferramentas e linguagens que domino no dia a dia
+    </p>
+    <div class="skills-grid" id="skillsGrid">
+      <!-- Badges are injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PROJECTS ═══════════════════════════ -->
+<section id="projetos" aria-label="Projetos">
+  <div class="section-inner">
+    <h2 class="section-title reveal">Meus Projetos</h2>
+    <p class="section-subtitle reveal" style="transition-delay:0.05s">
+      Clique em "+ Adicionar Projeto" para incluir seu trabalho
+    </p>
+
+    <div class="projects-track reveal" id="projectsTrack" style="transition-delay:0.1s"
+         role="list" aria-label="Lista de projetos">
+      <!-- Cards injected by JS -->
+      <button class="add-project-card" id="addProjectBtn" aria-label="Adicionar novo projeto">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Adicionar Projeto</span>
+      </button>
+    </div>
+
+    <div class="carousel-controls">
+      <button class="carousel-btn prev" id="prevBtn" aria-label="Projeto anterior">&#8592;</button>
+      <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Paginação"></div>
+      <button class="carousel-btn next" id="nextBtn" aria-label="Próximo projeto">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CONTACT ═══════════════════════════ -->
+<section id="contato" aria-label="Contato">
+  <div class="section-inner">
+    <h2 class="section-title reveal" style="text-align:center">Vamos Conversar?</h2>
+    <div class="contact-card reveal" style="transition-delay:0.1s">
+      <p class="contact-cta" contenteditable="false" id="contactCta"
+         aria-label="Chamada para ação (clique para editar)">
+        Aberto a novas oportunidades e projetos incríveis 🚀
+      </p>
+      <p class="contact-subtitle" contenteditable="false" id="contactSub"
+         aria-label="Subtítulo de contato (clique para editar)">
+        Se você tem um projeto interessante ou uma vaga alinhada com meu perfil,
+        entre em contato. Responderei o mais breve possível!
+      </p>
+
+      <div class="contact-email-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2
+                   2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span class="contact-email" contenteditable="false" id="contactEmail"
+              role="textbox" aria-label="Email de contato">
+          seuemail@exemplo.com
+        </span>
+      </div>
+
+      <div class="contact-social" id="contactSocial">
+        <!-- Filled from social links via JS -->
+      </div>
+
+      <a href="#" class="btn-primary" id="contactBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        Enviar Mensagem
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer role="contentinfo">
+  <div class="footer-logo">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none" style="display:inline;vertical-align:middle;margin-right:6px" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="#1d4ed8"/>
+      <text x="16" y="22" text-anchor="middle" font-family="'Space Grotesk',sans-serif"
+            font-weight="700" font-size="14" fill="white">KB</text>
+    </svg>
+    DevKaio
+  </div>
+  <p>© <span id="footerYear"></span> — Feito com 💙 e muito café</p>
+</footer>
+
+<!-- ═══════════════════════════ JAVASCRIPT ═══════════════════════════ -->
+<script>
+'use strict';
+
+/* ──────────────────────────────────────────────
+   UTILITIES
+   ────────────────────────────────────────────── */
+function qs(sel, parent) { return (parent || document).querySelector(sel); }
+function qsa(sel, parent) { return [...(parent || document).querySelectorAll(sel)]; }
+
+/* ──────────────────────────────────────────────
+   FOOTER YEAR
+   ────────────────────────────────────────────── */
+qs('#footerYear').textContent = new Date().getFullYear();
+
+/* ──────────────────────────────────────────────
+   MOBILE HAMBURGER
+   ────────────────────────────────────────────── */
+(function() {
+  const btn  = qs('#menuBtn');
+  const list = qs('#navLinks');
+  btn.addEventListener('click', () => {
+    const open = list.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+  // Close when a link is clicked
+  list.addEventListener('click', e => {
+    if (e.target.tagName === 'A') {
+      list.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+
+/* ──────────────────────────────────────────────
+   SCROLL REVEAL
+   ────────────────────────────────────────────── */
+(function() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(el => {
+      if (el.isIntersecting) { el.target.classList.add('visible'); io.unobserve(el.target); }
+    });
+  }, { threshold: 0.12 });
+  qsa('.reveal').forEach(el => io.observe(el));
+})();
+
+/* ──────────────────────────────────────────────
+   PARTICLES (lightweight canvas)
+   ────────────────────────────────────────────── */
+(function() {
+  const canvas = qs('#particles-canvas');
+  const ctx    = canvas.getContext('2d');
+  const DOTS   = 55;
+  let W, H, dots;
+
+  function resize() {
+    const parent = canvas.parentElement;
+    W = canvas.width  = parent.offsetWidth;
+    H = canvas.height = parent.offsetHeight;
+  }
+
+  function randomDot() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.6 + 0.4,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      o: Math.random() * 0.5 + 0.1
+    };
+  }
+
+  function init() { resize(); dots = Array.from({length: DOTS}, randomDot); }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach((d, i) => {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0) d.x = W; if (d.x > W) d.x = 0;
+      if (d.y < 0) d.y = H; if (d.y > H) d.y = 0;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(29,78,216,${d.o})`;
+      ctx.fill();
+      // Draw lines to nearby dots
+      for (let j = i + 1; j < dots.length; j++) {
+        const b = dots[j];
+        const dx = d.x - b.x, dy = d.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(d.x, d.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(29,78,216,${0.08 * (1 - dist/130)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(tick);
+  }
+
+  init();
+  tick();
+  window.addEventListener('resize', () => { resize(); });
+})();
+
+/* ──────────────────────────────────────────────
+   EDIT TOGGLE
+   ────────────────────────────────────────────── */
+(function() {
+  const btn   = qs('#editToggle');
+  const EDIT_FIELDS = [
+    '#bioName', '#bioRole', '#bioDesc',
+    '#contactCta', '#contactSub', '#contactEmail'
+  ];
+
+  let editing = false;
+
+  function applyEdit(val) {
+    EDIT_FIELDS.forEach(sel => {
+      const el = qs(sel);
+      if (!el) return;
+      el.contentEditable = val ? 'true' : 'false';
+    });
+    // Also enable project editables that exist
+    qsa('[data-editable]').forEach(el => {
+      el.contentEditable = val ? 'true' : 'false';
+    });
+    btn.classList.toggle('active', val);
+    btn.setAttribute('aria-pressed', val);
+    btn.innerHTML = val
+      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+           <polyline points="20 6 9 17 4 12"/>
+         </svg> ✅ Salvar edição`
+      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+           <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+         </svg> ✏️ Editar perfil`;
+  }
+
+  btn.addEventListener('click', () => { editing = !editing; applyEdit(editing); });
+})();
+
+/* ──────────────────────────────────────────────
+   AVATAR UPLOAD
+   ────────────────────────────────────────────── */
+(function() {
+  const area  = qs('#avatarArea');
+  const input = qs('#avatarInput');
+
+  function activate() { input.click(); }
+  area.addEventListener('click', activate);
+  area.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activate(); });
+
+  input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      // Remove placeholder content and add image
+      const img = document.createElement('img');
+      img.src = ev.target.result;
+      img.alt = 'Avatar';
+      // Clear old image if any
+      qsa('img', area).forEach(i => i.remove());
+      area.appendChild(img);
+      area.classList.add('has-image');
+      img.style.opacity = '0';
+      requestAnimationFrame(() => { img.style.transition = 'opacity 0.4s'; img.style.opacity = '1'; });
+    };
+    reader.readAsDataURL(file);
+  });
+})();
+
+/* ──────────────────────────────────────────────
+   SOCIAL LINK POPOVERS
+   ────────────────────────────────────────────── */
+(function() {
+  let activePopover = null;
+
+  function closeActive() {
+    if (activePopover) {
+      activePopover.classList.remove('open');
+      activePopover = null;
+    }
+  }
+
+  function initPopover(anchor) {
+    const popover = qs('.popover', anchor);
+    if (!popover) return;
+    const saveBtn   = qs('.popover-save', popover);
+    const cancelBtn = qs('.popover-cancel', popover);
+    const urlInput  = qs('input', popover);
+
+    anchor.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (activePopover && activePopover !== popover) closeActive();
+      const isOpen = popover.classList.toggle('open');
+      activePopover = isOpen ? popover : null;
+      if (isOpen) {
+        urlInput.value = isEmptyHref(anchor.href) ? '' : anchor.href;
+        setTimeout(() => urlInput.focus(), 50);
+      }
+    });
+
+    saveBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const val = urlInput.value.trim();
+      if (val) {
+        // For email links, use mailto:
+        if (anchor.id === 'linkEmail') {
+          anchor.href = val.startsWith('mailto:') ? val : 'mailto:' + val;
+        } else {
+          anchor.href = val;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener noreferrer';
+        }
+      }
+      closeActive();
+      syncContactSocial();
+    });
+
+    cancelBtn.addEventListener('click', e => { e.stopPropagation(); closeActive(); });
+    popover.addEventListener('click', e => e.stopPropagation());
+
+    // Enter to save
+    urlInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') saveBtn.click();
+      if (e.key === 'Escape') cancelBtn.click();
+    });
+  }
+
+  qsa('.social-link').forEach(initPopover);
+  document.addEventListener('click', closeActive);
+})();
+
+/* ──────────────────────────────────────────────
+   CONTACT SECTION SYNC
+   ────────────────────────────────────────────── */
+function syncContactSocial() {
+  const container = qs('#contactSocial');
+  if (!container) return;
+  container.innerHTML = '';
+  const links = [
+    { id: 'linkGithub',   label: 'GitHub' },
+    { id: 'linkLinkedin', label: 'LinkedIn' },
+    { id: 'linkEmail',    label: 'Email' }
+  ];
+  links.forEach(({ id, label }) => {
+    const src = qs('#' + id);
+    if (!src || isEmptyHref(src.href)) return;
+    const a = document.createElement('a');
+    a.href   = src.href;
+    a.className = 'btn-ghost';
+    a.target    = '_blank';
+    a.rel       = 'noopener noreferrer';
+    a.textContent = label;
+    container.appendChild(a);
+  });
+}
+
+/* Also sync contact button to email */
+qs('#contactBtn').addEventListener('click', e => {
+  e.preventDefault();
+  const emailLink = qs('#linkEmail');
+  if (emailLink && !isEmptyHref(emailLink.href)) {
+    window.location.href = emailLink.href;
+  }
+});
+
+/* ──────────────────────────────────────────────
+   SKILLS
+   ────────────────────────────────────────────── */
+(function() {
+  const skills = [
+    'JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js',
+    'HTML / CSS', 'Tailwind CSS', 'Git & GitHub', 'Python',
+    'REST APIs', 'Docker', 'PostgreSQL', 'MongoDB', 'Figma'
+  ];
+  const grid = qs('#skillsGrid');
+
+  skills.forEach((name, i) => {
+    const badge = document.createElement('span');
+    badge.className = 'skill-badge reveal';
+    badge.style.transitionDelay = (i * 0.04) + 's';
+    badge.innerHTML = `<span class="skill-dot" aria-hidden="true"></span>${name}`;
+    grid.appendChild(badge);
+  });
+
+  // Trigger scroll-reveal for dynamically added items
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(el => {
+      if (el.isIntersecting) { el.target.classList.add('visible'); io.unobserve(el.target); }
+    });
+  }, { threshold: 0.1 });
+  qsa('.skill-badge').forEach(el => io.observe(el));
+})();
+
+/* ──────────────────────────────────────────────
+   SHARED PROJECT STATE & HELPERS
+   (declared before createProjectCard so all
+   references inside it are valid at call-time)
+   ────────────────────────────────────────────── */
+let editingCards = false;
+let activeCardPopover = null;
+
+function isEmptyHref(url) {
+  return !url || url === '#' || url === window.location.href;
+}
+
+function closeActiveCardPopover() {
+  if (activeCardPopover) { activeCardPopover.classList.remove('open'); activeCardPopover = null; }
+}
+document.addEventListener('click', closeActiveCardPopover);
+
+function initProjectLinkPopovers(card) {
+  ['.project-link-demo', '.project-link-code'].forEach(sel => {
+    const anchor = qs(sel, card);
+    if (!anchor) return;
+    const popover  = qs('.popover', anchor);
+    const saveBtn  = qs('.popover-save', popover);
+    const cancelBtn= qs('.popover-cancel', popover);
+    const urlInput = qs('input', popover);
+
+    anchor.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (activeCardPopover && activeCardPopover !== popover) closeActiveCardPopover();
+      const isOpen = popover.classList.toggle('open');
+      activeCardPopover = isOpen ? popover : null;
+      if (isOpen) {
+        urlInput.value = isEmptyHref(anchor.href) ? '' : anchor.href;
+        setTimeout(() => urlInput.focus(), 50);
+      }
+    });
+
+    saveBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const val = urlInput.value.trim();
+      if (val) { anchor.href = val; anchor.target = '_blank'; anchor.rel = 'noopener noreferrer'; }
+      closeActiveCardPopover();
+    });
+
+    cancelBtn.addEventListener('click', e => { e.stopPropagation(); closeActiveCardPopover(); });
+    popover.addEventListener('click', e => e.stopPropagation());
+    urlInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') saveBtn.click();
+      if (e.key === 'Escape') cancelBtn.click();
+    });
+  });
+}
+
+function applyEditMode(scope) {
+  qsa('[data-editable]', scope || document).forEach(el => {
+    el.contentEditable = editingCards ? 'true' : 'false';
+  });
+}
+
+/* ──────────────────────────────────────────────
+   PROJECT CARD FACTORY
+   ────────────────────────────────────────────── */
+function createProjectCard(data) {
+  data = data || {};
+  const card = document.createElement('article');
+  card.className = 'project-card';
+  card.setAttribute('role', 'listitem');
+
+  const tagsHtml = (data.tags || ['React', 'Node.js']).map(t =>
+    `<span contenteditable="false" class="tag" data-editable>${t}</span>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="project-image-area">
+      <button class="remove-card-btn" title="Remover projeto" aria-label="Remover projeto">✕</button>
+      <div class="project-img-placeholder">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span>Imagem do projeto</span>
+      </div>
+      <button class="change-img-btn" aria-label="Trocar imagem do projeto">📷 Trocar imagem</button>
+      <input type="file" accept="image/*" class="project-img-input" hidden aria-hidden="true" />
+    </div>
+    <div class="project-info">
+      <h3 contenteditable="false" class="project-title" data-editable>${data.title || 'Nome do Projeto'}</h3>
+      <p contenteditable="false" class="project-description" data-editable>${data.description || 'Descrição breve do projeto. O que ele faz, tecnologias usadas, desafios resolvidos.'}</p>
+      <div class="project-tags">
+        ${tagsHtml}
+        <button class="add-tag-btn" aria-label="Adicionar tag">+ tag</button>
+      </div>
+      <div class="project-links" style="position:relative">
+        <a href="#" class="btn-outline project-link-demo" contenteditable="false" aria-label="Ver demo">🔗 Ver Demo
+          <div class="popover" role="dialog" aria-modal="true" aria-label="Link da demo">
+            <label>URL da Demo</label>
+            <input type="url" placeholder="https://meu-projeto.vercel.app" />
+            <div class="popover-actions">
+              <button class="popover-cancel">Cancelar</button>
+              <button class="popover-save">Salvar</button>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="btn-ghost project-link-code" contenteditable="false" aria-label="Ver código">💻 Ver Código
+          <div class="popover" role="dialog" aria-modal="true" aria-label="Link do código">
+            <label>URL do Repositório</label>
+            <input type="url" placeholder="https://github.com/usuario/repo" />
+            <div class="popover-actions">
+              <button class="popover-cancel">Cancelar</button>
+              <button class="popover-save">Salvar</button>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  `;
+
+  // Image upload
+  const changeBtn  = qs('.change-img-btn', card);
+  const fileInput  = qs('.project-img-input', card);
+  const imgArea    = qs('.project-image-area', card);
+  const placeholder = qs('.project-img-placeholder', card);
+
+  changeBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      placeholder.style.display = 'none';
+      let img = qs('.project-img', card);
+      if (!img) {
+        img = document.createElement('img');
+        img.className = 'project-img';
+        img.alt = qs('.project-title', card).textContent;
+        imgArea.insertBefore(img, changeBtn);
+      }
+      img.src = ev.target.result;
+      img.style.opacity = '0';
+      requestAnimationFrame(() => { img.style.transition = 'opacity 0.4s'; img.style.opacity = '1'; });
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Remove card
+  qs('.remove-card-btn', card).addEventListener('click', () => {
+    card.style.transition = 'opacity 0.3s, transform 0.3s';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.9)';
+    setTimeout(() => { card.remove(); updateDots(); }, 300);
+  });
+
+  // Add tag
+  qs('.add-tag-btn', card).addEventListener('click', () => {
+    const tag = document.createElement('span');
+    tag.contentEditable = editingCards ? 'true' : 'false';
+    tag.className = 'tag';
+    tag.setAttribute('data-editable', '');
+    tag.textContent = 'nova tag';
+    const addBtn = qs('.add-tag-btn', card);
+    addBtn.parentNode.insertBefore(tag, addBtn);
+    tag.focus();
+    // Select all text
+    const range = document.createRange();
+    range.selectNodeContents(tag);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+  });
+
+  // Popovers for project links
+  initProjectLinkPopovers(card);
+
+  // Respect current edit mode
+  applyEditMode(card);
+
+  return card;
+}
+
+/* ──────────────────────────────────────────────
+   PROJECTS CAROUSEL
+   ────────────────────────────────────────────── */
+(function() {
+  const track    = qs('#projectsTrack');
+  const addBtn   = qs('#addProjectBtn');
+  const dotsWrap = qs('#carouselDots');
+  const prevBtn  = qs('#prevBtn');
+  const nextBtn  = qs('#nextBtn');
+
+  // Seed with 3 demo cards
+  const demos = [
+    { title: 'Projeto Alpha', description: 'Aplicação web full-stack com autenticação, dashboard em tempo real e integração com API externa.', tags: ['React', 'Node.js', 'PostgreSQL'] },
+    { title: 'Projeto Beta',  description: 'E-commerce responsivo com carrinho de compras, checkout integrado e painel administrativo.', tags: ['Next.js', 'Tailwind', 'Stripe'] },
+    { title: 'Projeto Gamma', description: 'CLI tool para automação de deploys com Docker e integração contínua via GitHub Actions.', tags: ['Python', 'Docker', 'CI/CD'] }
+  ];
+
+  demos.forEach(d => track.insertBefore(createProjectCard(d), addBtn));
+
+  updateDots();
+
+  addBtn.addEventListener('click', () => {
+    const card = createProjectCard();
+    card.style.transform = 'scale(0.95)';
+    card.style.opacity   = '0';
+    track.insertBefore(card, addBtn);
+    requestAnimationFrame(() => {
+      card.style.transition = 'transform 280ms ease, opacity 280ms ease, box-shadow 200ms ease';
+      card.style.transform  = 'scale(1)';
+      card.style.opacity    = '1';
+    });
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }), 50);
+    updateDots();
+  });
+
+  function getCards() { return qsa('.project-card', track); }
+
+  function updateDots() {
+    const cards = getCards();
+    dotsWrap.innerHTML = '';
+    cards.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Projeto ${i + 1}`);
+      dot.addEventListener('click', () => scrollToCard(i));
+      dotsWrap.appendChild(dot);
+    });
+    highlightDot();
+  }
+
+  function highlightDot() {
+    const cards = getCards();
+    if (!cards.length) return;
+    const scrollLeft  = track.scrollLeft;
+    const cardWidth   = cards[0].offsetWidth + 24; // gap
+    const idx = Math.round(scrollLeft / cardWidth);
+    qsa('.carousel-dot', dotsWrap).forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+      d.setAttribute('aria-selected', i === idx);
+    });
+  }
+
+  function scrollToCard(idx) {
+    const cards = getCards();
+    if (!cards[idx]) return;
+    const cardWidth = cards[0].offsetWidth + 24;
+    track.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+  }
+
+  prevBtn.addEventListener('click', () => {
+    const cards    = getCards();
+    if (!cards.length) return;
+    const cardWidth = cards[0].offsetWidth + 24;
+    track.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const cards    = getCards();
+    if (!cards.length) return;
+    const cardWidth = cards[0].offsetWidth + 24;
+    track.scrollBy({ left: cardWidth, behavior: 'smooth' });
+  });
+
+  track.addEventListener('scroll', highlightDot, { passive: true });
+
+  // Swipe support
+  let startX = 0;
+  track.addEventListener('pointerdown', e => { startX = e.clientX; });
+  track.addEventListener('pointerup', e => {
+    const dx = e.clientX - startX;
+    const cards = getCards();
+    if (!cards.length) return;
+    const cardWidth = cards[0].offsetWidth + 24;
+    if (Math.abs(dx) > 40) {
+      track.scrollBy({ left: dx < 0 ? cardWidth : -cardWidth, behavior: 'smooth' });
+    }
+  });
+
+  // Make updateDots available globally (called on card remove)
+  window.updateDots = updateDots;
+})();
+
+/* ──────────────────────────────────────────────
+   EDIT TOGGLE — project cards sync
+   ────────────────────────────────────────────── */
+(function() {
+  const btn = qs('#editToggle');
+  btn.addEventListener('click', () => {
+    editingCards = !editingCards;
+    applyEditMode();
+  });
+})();
+</script>
+</body>
+</html>

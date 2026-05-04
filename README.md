@@ -1,2 +1,2 @@
-# Link do Portifólio:
+# Link do Portfólio:
 -> https://portifolio-dev-kaio-bruno.vercel.app/

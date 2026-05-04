@@ -122,8 +122,8 @@ qs('#contactBtn').addEventListener('click', e => {
    ────────────────────────────────────────────── */
 (function() {
   const skills = [
-    'JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js',
-    'HTML / CSS', 'Tailwind CSS', 'Git & GitHub', 'Python',
+    'JavaScript', 'React', 'Next.js', 'Node.js',
+    'HTML / CSS', 'Tailwind CSS', 'Git & GitHub',
     'REST APIs', 'Docker', 'PostgreSQL', 'MongoDB', 'Figma'
   ];
   const grid = qs('#skillsGrid');
@@ -192,8 +192,10 @@ function createProjectCard(data) {
 
   // Seed with 3 demo cards
   const demos = [
-    { title: 'Projeto Alpha', description: 'Aplicação web full-stack com autenticação, dashboard em tempo real e integração com API externa.', tags: ['React', 'Node.js', 'PostgreSQL'], demoUrl: '#', codeUrl: 'https://github.com' },
+    { title: 'App Biblioteca', description: 'Aplicação web full-stack com autenticação, dashboard em tempo real e integração com API externa.', tags: ['React', 'Node.js', 'PostgreSQL'], demoUrl: 'https://www.bibliotecauni.space/', codeUrl: 'https://github.com/app-biblioteca-ads-unifor-grupo-35-N697/biblioteca-emprestimos-cloud.git' },
+    
     { title: 'Projeto Beta',  description: 'E-commerce responsivo com carrinho de compras, checkout integrado e painel administrativo.', tags: ['Next.js', 'Tailwind', 'Stripe'], demoUrl: '#', codeUrl: 'https://github.com' },
+    
     { title: 'Projeto Gamma', description: 'CLI tool para automação de deploys com Docker e integração contínua via GitHub Actions.', tags: ['Python', 'Docker', 'CI/CD'], demoUrl: '#', codeUrl: 'https://github.com' }
   ];
 

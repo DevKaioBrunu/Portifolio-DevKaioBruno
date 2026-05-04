@@ -1,2 +1,2 @@
 # Link do Portfólio:
--> https://portifolio-dev-kaio-bruno.vercel.app/
+-> https://portfolio-dev-kaio-bruno.vercel.app/

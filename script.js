@@ -194,9 +194,9 @@ function createProjectCard(data) {
   const demos = [
     { title: 'App Biblioteca', description: 'Aplicação web full-stack com autenticação, dashboard em tempo real e integração com API externa.', tags: ['React', 'Node.js', 'PostgreSQL'], demoUrl: 'https://www.bibliotecauni.space/', codeUrl: 'https://github.com/app-biblioteca-ads-unifor-grupo-35-N697/biblioteca-emprestimos-cloud.git' },
     
-    { title: 'Projeto Beta',  description: 'E-commerce responsivo com carrinho de compras, checkout integrado e painel administrativo.', tags: ['Next.js', 'Tailwind', 'Stripe'], demoUrl: '#', codeUrl: 'https://github.com' },
-    
-    { title: 'Projeto Gamma', description: 'CLI tool para automação de deploys com Docker e integração contínua via GitHub Actions.', tags: ['Python', 'Docker', 'CI/CD'], demoUrl: '#', codeUrl: 'https://github.com' }
+    //{ title: 'Projeto Beta',  description: 'E-commerce responsivo com carrinho de compras, checkout integrado e painel administrativo.', tags: ['Next.js', 'Tailwind', 'Stripe'], demoUrl: '#', codeUrl: 'https://github.com' },
+
+    //{ title: 'Projeto Gamma', description: 'CLI tool para automação de deploys com Docker e integração contínua via GitHub Actions.', tags: ['Python', 'Docker', 'CI/CD'], demoUrl: '#', codeUrl: 'https://github.com' }
   ];
 
   demos.forEach(d => track.appendChild(createProjectCard(d)));
